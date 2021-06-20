@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "230446626778",
+    "project_id": "memefire-c2c55",
+    "storage_bucket": "memefire-c2c55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230446626778:android:0d93e4d67f2154d34732e3",
+        "android_client_info": {
+          "package_name": "com.example.memefire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230446626778-m0k8c61mhojp21qsr4h256tbjfur9ss1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.memefire",
+            "certificate_hash": "7d0c46033099d3b90e0ab954424215a1b2a7681f"
+          }
+        },
+        {
+          "client_id": "230446626778-o198udtptvfhbr2eaqu40far9q4h9d2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2f_7h0dAz3NvncmETtfmwFLUj63KnEj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230446626778-o198udtptvfhbr2eaqu40far9q4h9d2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
