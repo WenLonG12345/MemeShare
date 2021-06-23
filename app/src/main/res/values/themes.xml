@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.MemeFire" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/grey_400</item>
-        <item name="colorPrimaryVariant">@color/grey_600</item>
+        <item name="colorPrimary">@color/skyblue</item>
+        <item name="colorPrimaryVariant">@color/dark_skyblue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

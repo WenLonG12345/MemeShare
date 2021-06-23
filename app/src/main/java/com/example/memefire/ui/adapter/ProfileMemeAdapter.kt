@@ -5,38 +5,31 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.memefire.R
-import com.example.memefire.databinding.ItemMemeBinding
+import com.example.memefire.databinding.ItemProfileMemeBinding
 import com.example.memefire.model.Meme
 
-class MemeListAdapter(
+class ProfileMemeAdapter(
     private val onFavouriteClick: (Meme?) -> Unit,
     private val onShareClick: (Meme?) -> Unit
-): RecyclerView.Adapter<MemeListAdapter.MemeVH>() {
+): RecyclerView.Adapter<ProfileMemeAdapter.MemeVH>() {
 
-    private var memeList = listOf<Meme>()
+    private var memeList = mutableListOf<Meme>()
 
     fun setData(memeList: List<Meme>) {
-        this.memeList = memeList
+        this.memeList = memeList.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun setFavouriteMeme(meme: Meme) {
+    fun deleteItem(meme: Meme) {
         val pos = memeList.indexOf(meme)
-        memeList[pos].isfavoruite = true
-        notifyItemChanged(pos)
+        memeList.removeAt(pos)
+        notifyItemRemoved(pos)
+        notifyItemRangeChanged(pos, memeList.size)
     }
 
-    inner class MemeVH(private val binding: ItemMemeBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class MemeVH(private val binding: ItemProfileMemeBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(meme: Meme) {
             with(binding) {
-                tvAuthor.text = meme.author
-                tvUps.text = meme.ups.toString()
-
-                if(meme.isfavoruite) {
-                    ivFavourite.setImageResource(R.drawable.ic_favourite)
-                } else {
-                    ivFavourite.setImageResource(R.drawable.ic_unfavourite)
-                }
 
                 ivMeme.load(meme.url) {
                     placeholder(R.drawable.ic_meme_placeholder)
@@ -53,17 +46,17 @@ class MemeListAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: MemeVH, position: Int) {
-        holder.bind(memeList[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemeVH {
+        val binding = ItemProfileMemeBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return MemeVH(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemeVH {
-       val binding = ItemMemeBinding.inflate(
-           LayoutInflater.from(parent.context),
-           parent,
-           false
-       )
-        return MemeVH(binding)
+    override fun onBindViewHolder(holder: MemeVH, position: Int) {
+        holder.bind(memeList[position])
     }
 
     override fun getItemCount(): Int {
