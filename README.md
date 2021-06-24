@@ -21,3 +21,6 @@
 - Image loading - **Coil**
 - Collapsing Toolbar design
 
+## Credit
+Thanks to D3vd for awesome Meme API scrapped from reddit. 
+Link: https://github.com/D3vd/Meme_Api
