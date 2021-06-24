@@ -1,7 +1,7 @@
 # MemeShare
 "Meme" topic related project to participate in "Philip's code war". 
 
-<img src="screenshot/1.png" height="528" width="250"><img src="screenshot/2.png" height="528" width="250"><img src="screenshot/3.png" height="528" width="250"><img src="screenshot/4.png" height="528" width="250">
+<img src="screenshot/1.png" height="528" width="250"><img src="screenshot/2.png" height="528" width="250"><img src="screenshot/3.png" height="528" width="250"><img src="screenshot/4.png" height="528" width="250"><img src="screenshot/5.png" height="528" width="250">
 
 ## Features
 - Display random meme scraped from reddit. 
@@ -9,6 +9,7 @@
 - View all favourited meme in your profile.
 - Directly share the meme to your friends with any social media apps!
 - Nicely design Collapsing Toolbar in Profile Page.
+- Ricardo Milos as your loading indicator :heart_eyes:
 
 
 ## Tech-stack
