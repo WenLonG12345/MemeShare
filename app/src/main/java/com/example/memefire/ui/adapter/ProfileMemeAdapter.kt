@@ -45,7 +45,6 @@ class ProfileMemeAdapter(
             }
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemeVH {
         val binding = ItemProfileMemeBinding.inflate(
             LayoutInflater.from(parent.context),

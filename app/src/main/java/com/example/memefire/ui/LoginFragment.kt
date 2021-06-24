@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
 import com.example.memefire.R
 import com.example.memefire.databinding.FragmentLoginBinding
@@ -36,9 +37,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private val memeViewModel by activityViewModels<MemeViewModel>()
     @Inject lateinit var progressDialog: CustomProgressDialog
+    private var savedStateHandle: SavedStateHandle? = null
+
+    companion object {
+        const val LOGIN_SUCCESSFUL = "LOGIN_SUCCESSFUL"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentLoginBinding.bind(view)
+
+        savedStateHandle = findNavController().previousBackStackEntry?.savedStateHandle
+        savedStateHandle?.set(LOGIN_SUCCESSFUL, false)
 
         binding.tvSignUp.setOnClickListener {
             findNavController().navigate(R.id.signupFragment)
@@ -88,6 +97,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 is ApiResult.Error -> result.message?.showToast(requireContext())
                                 ApiResult.Loading -> Unit
                                 is ApiResult.Success -> {
+                                    savedStateHandle?.set(LOGIN_SUCCESSFUL, true)
                                     "Successfully Log In".showToast(requireContext())
                                     findNavController().navigateUp()
                                 }

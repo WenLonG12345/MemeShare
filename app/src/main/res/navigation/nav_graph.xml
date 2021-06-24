@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_memeListFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_memeListFragment_to_memeDetailsFragment"
+            app:destination="@id/memeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -41,4 +44,15 @@
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/memeDetailsFragment"
+        android:name="com.example.memefire.ui.MemeDetailsDialog"
+        tools:layout="@layout/dialog_meme_details"
+        android:label="">
+        <argument
+            android:name="meme"
+            app:argType="com.example.memefire.model.Meme"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </dialog>
 </navigation>

@@ -31,7 +31,7 @@ class MemeViewModel @Inject constructor(
     private val memeRepository: MemeRepository
 ): ViewModel() {
 
-    var memeList = listOf<Meme>()
+    var memeList = mutableListOf<Meme?>()
     var profileMemeList = mutableListOf<Meme>()
 
     val auth = FirebaseAuth.getInstance()

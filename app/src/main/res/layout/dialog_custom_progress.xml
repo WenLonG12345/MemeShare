@@ -5,10 +5,11 @@
     android:background="@drawable/bg_custom_dialog"
     android:layout_gravity="center">
 
-    <ProgressBar
-        android:id="@+id/pb_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/meme_loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ricardo"
         android:layout_centerInParent="true"/>
 
     <TextView
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="Loading..."
         android:textSize="18sp"
-        android:layout_below="@id/pb_loading"
+        android:layout_below="@id/meme_loading"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
 

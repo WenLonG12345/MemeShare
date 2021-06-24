@@ -2,13 +2,9 @@ package com.example.memefire.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,6 +29,8 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
     private val viewModel by activityViewModels<MemeViewModel>()
     private lateinit var memeAdapter: MemeListAdapter
 
+    private var isLoading = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentMemeListBinding.bind(view)
 
@@ -50,6 +48,10 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
                         startActivity(shareIntent)
                     })
                 }
+            },
+            onMemeClick = { meme ->
+                val action = MemeListFragmentDirections.actionMemeListFragmentToMemeDetailsFragment(meme)
+                findNavController().navigate(action)
             }
         )
 
@@ -59,6 +61,11 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
             addOnScrollListener(object: OnScrollListener(){
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
+
+                    if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                        // reach bottom
+                        loadMoreMeme()
+                    }
                 }
             })
         }
@@ -83,7 +90,7 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
                         event.meme?.let { meme ->
                             val pos = viewModel.memeList.indexOf(meme)
 
-                            viewModel.memeList[pos].isfavoruite = true
+                            viewModel.memeList[pos]?.isfavoruite = true
 
                             memeAdapter.setFavouriteMeme(meme)
                         }
@@ -97,14 +104,30 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
         }
     }
 
+    private fun loadMoreMeme() {
+        viewModel.memeAPI.observe(viewLifecycleOwner, { result ->
+            when(result) {
+                is ApiResult.Error -> result.message?.showToast(requireContext())
+                ApiResult.Loading -> {
+                    memeAdapter.setLoading()
+                }
+                is ApiResult.Success -> {
+                    memeAdapter.closeLoading()
+                    viewModel.memeList.addAll(result.data)
+                    memeAdapter.setData(viewModel.memeList)
+                }
+            }
+        })
+    }
+
     private fun loadMemeData() {
         viewModel.memeAPI.observe(viewLifecycleOwner, { result ->
-            binding.progressBar.isVisible = result is ApiResult.Loading
+            binding.memeLoading.isVisible = result is ApiResult.Loading
             binding.tvEmptyResult.isVisible = result is ApiResult.Error
 
             when(result) {
                 is ApiResult.Success -> {
-                    viewModel.memeList = result.data
+                    viewModel.memeList = result.data.toMutableList()
                     memeAdapter.setData(viewModel.memeList)
                 }
                 is ApiResult.Error -> result.message?.showToast(requireContext())
