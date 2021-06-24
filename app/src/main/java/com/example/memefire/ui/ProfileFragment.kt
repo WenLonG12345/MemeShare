@@ -104,6 +104,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     viewModel.profileMemeList = result.data
                     profileMemeAdapter.setData(viewModel.profileMemeList)
                     profileHeaderAdapter.setCount(viewModel.profileMemeList.size)
+
                     // after profileMemeAdapter load finish, only add to its header
                     concatAdapter.addAdapter(0, profileHeaderAdapter)
                 }
@@ -119,7 +120,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             .setMessage("Are you sure to remove this meme? Removed meme possibly cannot be found again.")
             .setPositiveButton("Sure") { dialog, _ ->
                 meme?.let {
-                    viewModel.onRemoveFavMeme(meme).observe(viewLifecycleOwner, { result ->
+                    viewModel.onRemoveProfileFavMeme(meme).observe(viewLifecycleOwner, { result ->
                         when (result) {
                             is ApiResult.Error -> result.message?.showToast(requireContext())
                             ApiResult.Loading -> Unit

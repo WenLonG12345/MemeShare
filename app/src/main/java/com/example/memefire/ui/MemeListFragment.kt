@@ -29,8 +29,6 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
     private val viewModel by activityViewModels<MemeViewModel>()
     private lateinit var memeAdapter: MemeListAdapter
 
-    private var isLoading = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentMemeListBinding.bind(view)
 
@@ -89,16 +87,23 @@ class MemeListFragment : Fragment(R.layout.fragment_meme_list) {
                         event.msg?.showToast(requireContext())
                         event.meme?.let { meme ->
                             val pos = viewModel.memeList.indexOf(meme)
-
                             viewModel.memeList[pos]?.isfavoruite = true
-
-                            memeAdapter.setFavouriteMeme(meme)
+                            memeAdapter.setFavouriteMeme(meme, true)
+                        }
+                    }
+                    is MemeEvent.RemoveFavMeme -> {
+                        event.msg?.showToast(requireContext())
+                        event.meme?.let { meme ->
+                            val pos = viewModel.memeList.indexOf(meme)
+                            viewModel.memeList[pos]?.isfavoruite = false
+                            memeAdapter.setFavouriteMeme(meme, false)
                         }
                     }
                     is MemeEvent.NavigateToLoginFragment -> {
                         findNavController().navigate(R.id.loginFragment)
                         event.msg.showToast(requireContext())
                     }
+
                 }
             }
         }

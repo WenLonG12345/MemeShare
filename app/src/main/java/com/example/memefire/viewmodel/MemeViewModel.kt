@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MemeViewModel @Inject constructor(
     private val memeRepository: MemeRepository
-): ViewModel() {
+) : ViewModel() {
 
     var memeList = mutableListOf<Meme?>()
     var profileMemeList = mutableListOf<Meme>()
@@ -56,14 +56,19 @@ class MemeViewModel @Inject constructor(
     fun onAddFavMeme(meme: Meme?) {
         viewModelScope.launch {
             meme?.let { meme ->
-                if(auth.currentUser == null) {
+                if (auth.currentUser == null) {
                     memeEventChannel.send(MemeEvent.NavigateToLoginFragment("Please Login First"))
                 } else {
                     memeRepository.addFavMeme(fireStore, auth.currentUser, meme)
                         .collect { result ->
-                            when(result) {
+                            when (result) {
                                 is ApiResult.Success -> {
-                                    memeEventChannel.send(MemeEvent.AddFavMeme("Added to Favourite", meme))
+                                    memeEventChannel.send(
+                                        MemeEvent.AddFavMeme(
+                                            "Added to Favourite",
+                                            meme
+                                        )
+                                    )
                                 }
                                 is ApiResult.Error -> {
                                     memeEventChannel.send(MemeEvent.AddFavMeme(result.message))
@@ -77,7 +82,28 @@ class MemeViewModel @Inject constructor(
         }
     }
 
-    fun onRemoveFavMeme(meme: Meme) = memeRepository.removeFavMeme(fireStore, auth.currentUser, meme).asLiveData()
+    fun onRemoveFavMeme(meme: Meme) {
+        viewModelScope.launch {
+            memeRepository.removeFavMeme(fireStore, auth.currentUser, meme)
+                .collect { result ->
+                    when (result) {
+                        is ApiResult.Success -> {
+                            memeEventChannel.send(MemeEvent.RemoveFavMeme("Remove From Favourite", meme))
+                        }
+                        is ApiResult.Error -> {
+                            memeEventChannel.send(MemeEvent.RemoveFavMeme(result.message))
+                        }
+                        ApiResult.Loading -> Unit
+
+                    }
+                }
+        }
+    }
+
+
+    // remove meme without using MemeEventChannel
+    fun onRemoveProfileFavMeme(meme: Meme) =
+        memeRepository.removeFavMeme(fireStore, auth.currentUser, meme).asLiveData()
 
     fun onGetFavMeme() = memeRepository.getFavMeme(fireStore, auth.currentUser).asLiveData()
 
@@ -94,7 +120,10 @@ class MemeViewModel @Inject constructor(
             val bitmap = (result as BitmapDrawable).bitmap
 
             try {
-                val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png")
+                val file = File(
+                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                    "share_image_" + System.currentTimeMillis() + ".png"
+                )
                 val out = FileOutputStream(file)
                 bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
                 out.close()

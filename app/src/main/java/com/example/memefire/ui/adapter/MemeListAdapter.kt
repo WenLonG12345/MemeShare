@@ -23,9 +23,9 @@ class MemeListAdapter(
         notifyDataSetChanged()
     }
 
-    fun setFavouriteMeme(meme: Meme) {
+    fun setFavouriteMeme(meme: Meme, isFavourite: Boolean) {
         val pos = memeList.indexOf(meme)
-        memeList[pos]?.isfavoruite = true
+        memeList[pos]?.isfavoruite = isFavourite
         notifyItemChanged(pos)
     }
 
