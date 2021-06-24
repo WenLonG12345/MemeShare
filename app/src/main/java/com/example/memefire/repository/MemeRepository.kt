@@ -21,16 +21,21 @@ class MemeRepository @Inject constructor(
 ) {
 
     fun getMemeList() = flow {
-        emit(ApiResult.Loading)
-        val call = apiService.getMemeList()
+        try{
+            emit(ApiResult.Loading)
+            val call = apiService.getMemeList()
 
-        if(call.isSuccessful) {
-            call.body()?.let {
-                emit(ApiResult.Success(it.memes))
+            if(call.isSuccessful) {
+                call.body()?.let {
+                    emit(ApiResult.Success(it.memes))
+                }
+            } else {
+                emit(ApiResult.Error(call.errorBody()?.string()))
             }
-        } else {
-            emit(ApiResult.Error(call.errorBody()?.string()))
+        }catch (e: Exception) {
+            emit(ApiResult.Error(e.toString()))
         }
+
     }
 
 
